@@ -1,0 +1,391 @@
+APUNTES DE FT_PRINTF!!!
+
+
+-------------------------------- MAIN PARA PROBAR LA FUNCION FT_PRINTF ---------------------------------------------------
+
+/*
+int main(void)
+{
+    char *str = "Hola, mundo!";
+    int num = 42;
+    unsigned int unum = 42;
+    void *ptr = &num;
+    int len;
+
+    ft_printf("Imprimiendo un solo carácter: %c\n", 'A');
+    ft_printf("Imprimiendo una cadena: %s\n", str);
+    ft_printf("El puntero void * dado como argumento se imprime en formato hexadecimal: %p\n", ptr);
+    ft_printf("Imprimiendo un número decimal (base 10): %d\n", num);
+    ft_printf("Imprimiendo un entero en base 10: %i\n", num);
+    ft_printf("Imprimiendo un número decimal (base 10) sin signo: %u\n", unum);
+    ft_printf("Imprimiendo un número hexadecimal (base 16) en minúsculas: %x\n", num);
+    ft_printf("Imprimiendo un número hexadecimal (base 16) en mayúsculas: %X\n", num);
+    ft_printf("Imprimiendo el símbolo del porcentaje: %%\n");
+
+    ft_printf("hola soy %s, y tengo %d años.\n", "Marvin", 42) ;
+    
+    return 0;
+}*/
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+NOTA:
+-- Creo que esta funcion no me hace falta en el ft_printf
+void	ft_putnbr_fd(int n, int fd)
+
+
+
+
+
+
+-- main para usar en pruebas --
+
+#include <stdio.h>
+
+int main(void) {
+
+	char c = 'n';
+	char nombre []= "Nathan";
+
+    int a = 42; // Variable entera
+    int *puntero; // Declaración de un puntero a un entero
+
+    puntero = &a; // Asignación de la dirección de memoria de 'a' al puntero
+
+    printf("El valor de a es: %d.\n", a);
+    printf("El valor apuntado por el puntero es: %d.\n", *puntero); // Acceso al valor apuntado
+    printf("La dirección de memoria de 'a' es: %p\n", puntero); // Dirección de memoria
+    
+    
+    printf("El primer caracter del string %s es %c, su puntero es %p, tambien tiene los sig digitos %d",nombre, c, ptr, a);
+
+
+    return 0;
+    }
+
+------------------------PROBAR--> print_length += ft_print_ptr(va_arg(args, unsigned long long));----------------------------------
+
+# include <stddef.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <string.h>
+# include <fcntl.h>
+# include <sys/errno.h>
+# include <stdint.h>
+# include <stdarg.h>
+
+int    ft_ptr_len(uintptr_t num)
+{
+    int    len;
+
+    len = 0;
+    while (num != 0)
+    {
+        len++;
+        num = num / 16;
+    }
+    return (len);
+}
+
+
+void    ft_putchar_fd(char c, int fd)
+{
+    write(fd, &c, 1);
+}
+
+
+void    ft_put_ptr(uintptr_t num)
+{
+    if (num >= 16)
+    {
+        ft_put_ptr(num / 16);
+        ft_put_ptr(num % 16);
+    }
+    else
+    {
+        if (num <= 9)
+            ft_putchar_fd((num + '0'), 1);
+        else
+            ft_putchar_fd((num - 10 + 'a'), 1);
+    }
+}
+
+
+
+int    ft_print_ptr(unsigned long long ptr)
+{
+    int    print_length;
+
+    print_length = 0;
+    print_length += write(1, "0x", 2);
+    if (ptr == 0)
+        print_length += write(1, "0", 1);
+    else
+    {
+        ft_put_ptr(ptr);
+        print_length += ft_ptr_len(ptr);
+    }
+    return (print_length);
+}
+
+int    ft_printchar(int c)
+{
+    write(1, &c, 1);
+    return (1);
+}
+
+int    ft_formats(va_list args, const char format)
+{
+    int    print_length;
+
+    print_length = 0;
+    if (format == 'p'){
+      print_length += ft_print_ptr(va_arg(args, unsigned long long));
+      }
+    return (print_length);
+}
+
+
+int    ft_printf(const char *str, ...)
+{
+    int        i;
+    va_list    args;
+    int        print_length;
+
+    i = 0;
+    print_length = 0;
+    va_start(args, str);
+    while (str[i])
+    {
+        if (str[i] == '%')
+        {
+            print_length += ft_formats(args, str[i + 1]);
+            i++;
+        }
+        else
+            print_length += ft_printchar(str[i]);
+        i++;
+    }
+    va_end(args);
+    return (print_length);
+}
+
+
+    int main(void) {
+
+    int a = 42; // Variable entera
+    int *puntero; // Declaración de un puntero a un entero
+
+    puntero = &a; // Asignación de la dirección de memoria de 'a' al puntero
+
+        ft_printf("DM:%p", puntero); // Dirección de memoria
+
+
+     return 0;
+    }
+
+------------------------PROBAR-->  print_length += ft_printnbr(va_arg(args, int)); ----------------------------------
+Nota:
+Acordarse que aqui usaremos nuestro FT_ITOA (NUMERO --> CHAR)
+
+Revisando he visto que podemos usar el ft_putchar_fd.c de mi libreria, asi que si falla algo mirar por si eso podría ser
+
+
+
+------------------------PROBAR-->  print_length += ft_print_unsigned(va_arg(args, unsigned int)); ----------------------------------
+aqui probe lo del uitoa y lo hice con este codigo para ver como iba, que al final es cambiar de NUMERO --> CHAR pero 
+para un ft_print_unsigned
+
+# include <stddef.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <string.h>
+# include <fcntl.h>
+# include <sys/errno.h>
+# include <stdint.h>
+# include <stdarg.h>
+int    ft_num_len(unsigned    int num)
+{
+    int    len;
+
+    len = 0;
+    while (num != 0)
+    {
+        len++;
+        num = num / 10;
+    }
+    return (len);
+}
+
+
+char    *ft_uitoa(unsigned int n)
+{
+    char    *num;
+    int        len;
+
+    len = ft_num_len(n);
+    num = (char *)malloc(sizeof(char) * (len + 1));
+    if (!num)
+        return (0);
+    num[len] = '\0';*.h, */*.h, *.c, */*.c
+    while (n != 0)
+    {
+        num[len - 1] = n % 10 + 48;
+        n = n / 10;
+        len--;
+    }
+    return (num);
+}
+
+
+    int main(void) {
+
+    int a = 42; // Variable entera
+    int *puntero; // Declaración de un puntero a un entero
+
+    puntero = &a; // Asignación de la dirección de memoria de 'a' al puntero
+
+        ft_uitoa(155); // Dirección de memoria
+
+
+     return 0;
+    }
+
+
+
+
+------------------------PROBAR-->  print_length += ft_print_hex(va_arg(args, unsigned int), format); ----------------------------------
+
+# include <stddef.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <string.h>
+# include <fcntl.h>
+# include <sys/errno.h>
+# include <stdint.h>
+# include <stdarg.h>
+
+void    ft_putchar_fd(char c, int fd)
+{
+    write (fd, &c, 1);
+    return ;
+}
+
+int    ft_hex_len(unsigned    int num)
+{
+    int    len;
+
+    len = 0;
+    while (num != 0)
+    {
+        len++;
+        num = num / 16;
+    }
+    return (len);
+}
+
+void    ft_put_hex(unsigned int num, const char format)
+{
+    if (num >= 16)
+    {
+        ft_put_hex(num / 16, format);
+        ft_put_hex(num % 16, format);
+    }
+    else
+    {
+        if (num <= 9)
+            ft_putchar_fd((num + '0'), 1);
+        else
+        {
+            if (format == 'x')
+                ft_putchar_fd((num - 10 + 'a'), 1);
+            if (format == 'X')
+                ft_putchar_fd((num - 10 + 'A'), 1);
+        }
+    }
+}
+
+int    ft_print_hex(unsigned int num, const char format)
+{
+    
+    if (num == 0)
+        return (write(1, "0", 1));
+    else
+        ft_put_hex(num, format);
+    return (ft_hex_len(num));
+}
+
+
+ int main() {
+    unsigned int numero = 255; // Un número sin signo en base decimal
+
+    ft_print_hex(numero,'x'); // Imprime en hexadecimal minúsculas
+    ft_print_hex(numero, 'X'); // Imprime en hexadecimal mayúsculas
+
+    return 0;
+}
+
+
+
+
+
+
+
+---------------------------------------MAKE ---------------------------------------------------
+
+
+CC = gcc
+
+RM = rm -rf
+
+NAME = libft.a
+
+SRC =   ft_atoi.c       \
+        
+
+BONUS = ft_lstadd_back_bonus.c  \
+        
+
+FLAGS = -Wall -Wextra -Werror -c
+
+OBJ = $(SRC:.c=.o)
+OBJBONUS = $(BONUS:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(OBJ)
+    ar rc $(NAME) $(OBJ)
+    ranlib $(NAME)
+
+bonus: $(OBJ) $(OBJBONUS)
+    ar rc $(NAME) $(OBJ) $(OBJBONUS)
+    ranlib $(NAME)
+
+%.o: %.c
+    $(CC) $(FLAGS) -o $@ $<
+
+clean:
+    $(RM) $(OBJ) $(OBJBONUS)
+
+fclean: clean
+    $(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all bonus clean fclean re
+
+
+
+
+
+
+
+
