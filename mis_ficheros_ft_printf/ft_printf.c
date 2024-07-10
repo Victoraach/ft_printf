@@ -63,3 +63,26 @@ int	ft_printf(const char *str, ...)
 	va_end(args);
 	return (print_length);
 }
+/*
+int main(void)
+{
+    char *str = "Nathan";
+    int num = 42;
+    unsigned int unum = 42;
+    void *ptr = &num;
+    int len;
+
+    ft_printf("Carácter: %c\n", 'N');
+    ft_printf("Cadena: %s\n", str);
+    ft_printf("El puntero void * se imprime en hexadecimal: %p\n", ptr);
+    ft_printf("Imprimiendo n decimal (base 10): %d\n", num);
+    ft_printf("Imprimiendo n en base 10: %i\n", num);
+    ft_printf("Imprimiendo n decimal (base 10) sin signo: %u\n", unum);
+    ft_printf("Imprimiendo n hexadecimal (base 16) en minúsc: %x\n", num);
+    ft_printf("Imprimiendo n hexadecimal (base 16) en mayúsc: %X\n", num);
+    ft_printf("Imprimiendo símbolo del porcentaje: %%\n");
+
+    ft_printf("hola soy %s, y tengo %d años.\n", "Marvin", 42) ;
+    
+    return 0;
+}*/

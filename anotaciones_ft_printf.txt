@@ -6,21 +6,21 @@ APUNTES DE FT_PRINTF!!!
 /*
 int main(void)
 {
-    char *str = "Hola, mundo!";
+    char *str = "Nathan";
     int num = 42;
     unsigned int unum = 42;
     void *ptr = &num;
     int len;
 
-    ft_printf("Imprimiendo un solo carácter: %c\n", 'A');
-    ft_printf("Imprimiendo una cadena: %s\n", str);
-    ft_printf("El puntero void * dado como argumento se imprime en formato hexadecimal: %p\n", ptr);
-    ft_printf("Imprimiendo un número decimal (base 10): %d\n", num);
-    ft_printf("Imprimiendo un entero en base 10: %i\n", num);
-    ft_printf("Imprimiendo un número decimal (base 10) sin signo: %u\n", unum);
-    ft_printf("Imprimiendo un número hexadecimal (base 16) en minúsculas: %x\n", num);
-    ft_printf("Imprimiendo un número hexadecimal (base 16) en mayúsculas: %X\n", num);
-    ft_printf("Imprimiendo el símbolo del porcentaje: %%\n");
+    ft_printf("Carácter: %c\n", 'N');
+    ft_printf("Cadena: %s\n", str);
+    ft_printf("El puntero void * se imprime en hexadecimal: %p\n", ptr);
+    ft_printf("Imprimiendo n decimal (base 10): %d\n", num);
+    ft_printf("Imprimiendo n en base 10: %i\n", num);
+    ft_printf("Imprimiendo n decimal (base 10) sin signo: %u\n", unum);
+    ft_printf("Imprimiendo n hexadecimal (base 16) en minúsc: %x\n", num);
+    ft_printf("Imprimiendo n hexadecimal (base 16) en mayúsc: %X\n", num);
+    ft_printf("Imprimiendo símbolo del porcentaje: %%\n");
 
     ft_printf("hola soy %s, y tengo %d años.\n", "Marvin", 42) ;
     
@@ -68,7 +68,15 @@ int main(void) {
     return 0;
     }
 
-------------------------PROBAR--> print_length += ft_print_ptr(va_arg(args, unsigned long long));----------------------------------
+
+------------------------PROBAR--> print_length += ft_printstr(va_arg(args, char *)); ----------------------------------
+
+
+
+
+
+
+------------------------PROBAR--> print_length += ft_print_ptr(va_arg(args, unsigned long long));  ----------------------------------
 
 # include <stddef.h>
 # include <stdio.h>
