@@ -1,5 +1,32 @@
 APUNTES DE FT_PRINTF!!!
 
+Ruta en pc babel ubuntu admin:
+/home/vaacnaaf/42_madrid/proyectos/ft_printf/ft_printf_github/mis_ficheros_ft_printf
+
+DUDAS: 
+preguntar porque para el puntero en una parte del codigo tenemos que quitar 10 para pintar la primera letra
+
+respuesta:
+Sí, en la representación hexadecimal de direcciones de memoria, las letras utilizadas van desde ‘a’ hasta ‘f’. 
+Esto se debe a que necesitamos representar valores de 10 a 15 en un solo dígito. 
+Por lo tanto, utilizamos las letras ‘a’ a ‘f’ para los valores 10 a 15, respectivamente. Aquí está la correspondencia:
+
+‘a’: 10
+‘b’: 11
+‘c’: 12
+‘d’: 13
+‘e’: 14
+‘f’: 15
+Por ejemplo, si la dirección de memoria es 0x1a3b, esto significa que los dígitos son 1, 10 (representado por ‘a’) y 3 (representado por ‘3’). En conjunto, forman el valor hexadecimal 6707.
+
+Sobre el tema del resto o la division entera
+
+entera (/) --> 7 entre 3 = 2
+
+resto (%) --> 7 entre 3 = 1
+
+
+
 
 -------------------------------- MAIN PARA PROBAR LA FUNCION FT_PRINTF ---------------------------------------------------
 
@@ -72,11 +99,69 @@ int main(void) {
 ------------------------PROBAR--> print_length += ft_printstr(va_arg(args, char *)); ----------------------------------
 
 
+# include <stddef.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <string.h>
+# include <fcntl.h>
+# include <sys/errno.h>
+# include <stdint.h>
+# include <stdarg.h>
 
+
+
+
+void    ft_putstr(char *str)
+{
+    int    i;
+
+    i = 0;
+    while (str[i])
+    {
+        write(1, &str[i], 1);
+        i++;
+    }
+}
+
+int    ft_printstr(char *str)
+{
+    int    i;
+
+    i = 0;
+    if (str == NULL)
+    {
+        ft_putstr("(null)");
+        return (6);
+    }
+    while (str[i])
+    {
+        write(1, &str[i], 1);
+        i++;
+    }
+    return (i);
+}
+
+
+int main(void)
+{
+    char *str = "Nathan";
+    char *str2 = NULL;
+    
+    ft_printstr(str);
+    ft_printstr(str2);
+    
+    
+    return 0;
+}
 
 
 
 ------------------------PROBAR--> print_length += ft_print_ptr(va_arg(args, unsigned long long));  ----------------------------------
+Revisando he visto que podemos usar el ft_putchar_fd.c de mi libreria, asi que si falla algo mirar por si eso podría ser
+
+Update sobre el putchar, ya he probado que funciona bien
+
 
 # include <stddef.h>
 # include <stdio.h>
@@ -192,7 +277,7 @@ int    ft_printf(const char *str, ...)
 
     puntero = &a; // Asignación de la dirección de memoria de 'a' al puntero
 
-        ft_printf("DM:%p", puntero); // Dirección de memoria
+        ft_printf("Dir Mem:%p", puntero); // Dirección de memoria
 
 
      return 0;
@@ -202,13 +287,6 @@ int    ft_printf(const char *str, ...)
 Nota:
 Acordarse que aqui usaremos nuestro FT_ITOA (NUMERO --> CHAR)
 
-Revisando he visto que podemos usar el ft_putchar_fd.c de mi libreria, asi que si falla algo mirar por si eso podría ser
-
-
-
-------------------------PROBAR-->  print_length += ft_print_unsigned(va_arg(args, unsigned int)); ----------------------------------
-aqui probe lo del uitoa y lo hice con este codigo para ver como iba, que al final es cambiar de NUMERO --> CHAR pero 
-para un ft_print_unsigned
 
 # include <stddef.h>
 # include <stdio.h>
@@ -219,6 +297,153 @@ para un ft_print_unsigned
 # include <sys/errno.h>
 # include <stdint.h>
 # include <stdarg.h>
+
+
+void    ft_putstr(char *str)
+{
+    int    i;
+
+    i = 0;
+    while (str[i])
+    {
+        write(1, &str[i], 1);
+        i++;
+    }
+}
+
+int    ft_printstr(char *str)
+{
+    int    i;
+
+    i = 0;
+    if (str == NULL)
+    {
+        ft_putstr("(null)");
+        return (6);
+    }
+    while (str[i])
+    {
+        write(1, &str[i], 1);
+        i++;
+    }
+    return (i);
+}
+
+
+static size_t    get_digits(int n)
+{
+    size_t    i;
+
+    if (n <= 0)
+        i = 1;
+    else
+        i = 0;
+    while (n)
+    {
+        n /= 10;
+        i++;
+    }
+    return (i);
+}
+
+// Converts an integer 'n' into a null-terminated string
+char    *ft_itoa(int n)
+{
+    char        *str_num;
+    size_t        digits;
+    long int    num;
+
+    num = n;
+    digits = get_digits(n);
+    if (n < 0)
+    {
+        num *= -1;
+    }
+    str_num = (char *)malloc(sizeof(char) * (digits + 1));
+    if (!str_num)
+        return (NULL);
+    *(str_num + digits) = 0;
+    while (digits--)
+    {
+        *(str_num + digits) = num % 10 + '0';
+        num = num / 10;
+    }
+    if (n < 0)
+        *(str_num + 0) = '-';
+    return (str_num);
+}
+
+
+
+int    ft_printnbr(int n)
+{
+    int        len;
+    char    *num;
+
+    len = 0;
+    num = ft_itoa(n);
+    len = ft_printstr(num);
+    free(num);
+    return (len);
+}
+
+
+    int main(void) {
+
+    int n = -42; // Variable entera
+
+         ft_printnbr(n);
+
+
+     return 0;
+    }
+
+
+------------------------PROBAR-->  print_length += ft_print_unsigned(va_arg(args, unsigned int)); ----------------------------------
+hemos creado un uitoa, que al final es cambiar de NUMERO --> CHAR pero para un ft_print_unsigned
+
+# include <stddef.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <string.h>
+# include <fcntl.h>
+# include <sys/errno.h>
+# include <stdint.h>
+# include <stdarg.h>
+
+void    ft_putstr(char *str)
+{
+    int    i;
+
+    i = 0;
+    while (str[i])
+    {
+        write(1, &str[i], 1);
+        i++;
+    }
+}
+
+
+int    ft_printstr(char *str)
+{
+    int    i;
+
+    i = 0;
+    if (str == NULL)
+    {
+        ft_putstr("(null)");
+        return (6);
+    }
+    while (str[i])
+    {
+        write(1, &str[i], 1);
+        i++;
+    }
+    return (i);
+}
+
+
 int    ft_num_len(unsigned    int num)
 {
     int    len;
@@ -232,7 +457,6 @@ int    ft_num_len(unsigned    int num)
     return (len);
 }
 
-
 char    *ft_uitoa(unsigned int n)
 {
     char    *num;
@@ -242,7 +466,7 @@ char    *ft_uitoa(unsigned int n)
     num = (char *)malloc(sizeof(char) * (len + 1));
     if (!num)
         return (0);
-    num[len] = '\0';*.h, */*.h, *.c, */*.c
+    num[len] = '\0';
     while (n != 0)
     {
         num[len - 1] = n % 10 + 48;
@@ -252,19 +476,32 @@ char    *ft_uitoa(unsigned int n)
     return (num);
 }
 
+int    ft_print_unsigned(unsigned int n)
+{
+    int        print_length;
+    char    *num;
 
-    int main(void) {
+    print_length = 0;
+    if (n == 0)
+        print_length += write(1, "0", 1);
+    else
+    {
+        num = ft_uitoa(n);
+        print_length += ft_printstr(num);
+        free(num);
+    }
+    return (print_length);
+}
 
-    int a = 42; // Variable entera
-    int *puntero; // Declaración de un puntero a un entero
 
-    puntero = &a; // Asignación de la dirección de memoria de 'a' al puntero
+int main(void) {
 
-        ft_uitoa(155); // Dirección de memoria
-
+    unsigned int a = 155; // Variable entera
+    
+        ft_print_unsigned(a);
 
      return 0;
-    }
+}
 
 
 
@@ -286,6 +523,7 @@ void    ft_putchar_fd(char c, int fd)
     write (fd, &c, 1);
     return ;
 }
+
 
 int    ft_hex_len(unsigned    int num)
 {
@@ -323,7 +561,6 @@ void    ft_put_hex(unsigned int num, const char format)
 
 int    ft_print_hex(unsigned int num, const char format)
 {
-    
     if (num == 0)
         return (write(1, "0", 1));
     else
@@ -332,7 +569,10 @@ int    ft_print_hex(unsigned int num, const char format)
 }
 
 
- int main() {
+
+
+
+int main() {
     unsigned int numero = 255; // Un número sin signo en base decimal
 
     ft_print_hex(numero,'x'); // Imprime en hexadecimal minúsculas
