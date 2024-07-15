@@ -3,6 +3,13 @@ APUNTES DE FT_PRINTF!!!
 Ruta en pc babel ubuntu admin:
 /home/vaacnaaf/42_madrid/proyectos/ft_printf/ft_printf_github/mis_ficheros_ft_printf
 
+Ruta en MAC de 42:
+/home/valvarez/Documents/cursus_42_Madrid/ft_printf/ft_printf_GITHUB
+
+comandos largos repetitivos:
+cc -Wall -Wextra -Werror ft_printf.c libftprintf.a
+
+
 DUDAS: 
 preguntar porque para el puntero en una parte del codigo tenemos que quitar 10 para pintar la primera letra
 

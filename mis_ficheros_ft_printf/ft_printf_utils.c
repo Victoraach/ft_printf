@@ -59,3 +59,10 @@ int	ft_printpercent(void)
 	write(1, "%", 1);
 	return (1);
 }
+
+int	ft_printnoexistentconversion(char c)
+{
+	write(1, "%", 1);
+	write(1, &c, 1);
+	return (2);
+}
