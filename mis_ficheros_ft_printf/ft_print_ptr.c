@@ -60,6 +60,7 @@ int	ft_print_ptr(void *ptr)
 	}
 	else
 	{
+		print_length += write(1, "0x", 2);
 		ft_put_ptr(n);
 		print_length += ft_ptr_len(n);
 	}
